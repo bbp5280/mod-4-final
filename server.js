@@ -35,7 +35,19 @@ app.get('/api/v1/garage_items/:id', (request, response) => {
 });
 
 app.post('/api/v1/garage_items', (request, response) => {
+  const newItem = request.body;
 
+  for(let requiredParameter of ['itemName', 'lingerReason', 'cleanliness']) {
+    if(!newItem[requiredParameter]) {
+      return response.status(422).json({
+        error: `you are missing the ${requiredParameter} property`
+      });
+    }
+  }
+
+  database('garage_items').insert(newItem, '*')
+    .then(insertedItem => response.status(201).json(insertedItem))
+    .catch(error => response.status(500).json({error: `Internal server error ${error}`}))
 });
 
 app.patch('/api/v1/garage_items/:id', (request, response) => {
