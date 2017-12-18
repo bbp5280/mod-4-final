@@ -27,8 +27,8 @@ app.get('/api/v1/garage_items/:id', (request, response) => {
     .then(item => {
       item.length ? response.status(200).json(item)
       :
-      respnse.status(404).json({
-        error: `Could not find owner with id: ${id}`
+      response.status(404).json({
+        error: `Could not find item with id: ${id}`
         });
     })
     .catch(error => response.status(500).json({error: `internal server error ${error}`}));

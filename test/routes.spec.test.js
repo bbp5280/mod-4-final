@@ -64,6 +64,8 @@ describe('API Routes', () => {
           response.body[0].should.have.property('itemName');
           response.body[0].should.have.property('lingerReason');
           response.body[0].should.have.property('cleanliness');
+          response.body[0].should.have.property('created_at');
+          response.body[0].should.have.property('updated_at');
           done();
         })
         .catch(error => {
@@ -71,5 +73,45 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('GET /api/v1/garage_items/:id', () => {
+  it('should return a specific item', (done) => {
+    chai.request(server)
+      .get('/api/v1/garage_items/1')
+      .then((response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body[0].id.should.equal(1);
+        response.body[0].itemName.should.equal('Rocking Horse');
+        response.body[0].lingerReason.should.equal('It is sentimental');
+        response.body[0].cleanliness.should.equal('Dusty');
+        response.body[0].should.have.property('created_at');
+        response.body[0].should.have.property('updated_at');
+        done();
+      })
+      .catch((error) => {
+        throw error;
+      });
+  });
+});
+
+describe('GET /api/v1/garage_items/:id', () => {
+  it('should return 404 error for item that does not exist', (done) => {
+    chai.request(server)
+      .get('/api/v1/garage_items/100')
+      .then((response) => {
+        response.should.have.status(404);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.equal('Could not find item with id: 100');
+        done();
+      })
+      .catch((error) => {
+        throw error;
+      });
+  });
+});
 
 });
