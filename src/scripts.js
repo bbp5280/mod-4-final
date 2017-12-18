@@ -5,8 +5,6 @@ const submitNewItem = (event) => {
     lingerReason: $('.item-linger-reason').val(),
     cleanliness: $('.dropdown-option').val()
   };
-
-  console.log(itemToPost);
   postNewItem(itemToPost);
 }
 
@@ -23,6 +21,10 @@ const postNewItem = (itemObject) => {
     .catch(error => console.log(error));
 }
 
+const appendNewItem = () => {
+  
+}
+
 const getItems = () => {
   fetch('/api/v1/garage_items')
     .then(response => response.json())
@@ -36,6 +38,7 @@ const appendGarageItems = (items) => {
       `<li class='garage-item item-id-${item.id}'>${item.itemName}</li>`);
   })
   numberOfGarageItems(items);
+  numberOfItemCleanliness(items);
 }
 
 const numberOfGarageItems = (items) => {
@@ -44,10 +47,20 @@ const numberOfGarageItems = (items) => {
   );
 }
 
-const filterCondition = (items, condition) {
+const filterCondition = (items, condition) => {
   const filteredItems = items.filter(item => item.cleanliness === condition)
-  
+  return filteredItems.length;
 }
+
+const numberOfItemCleanliness = (items) => {
+  const numRancid = filterCondition(items, 'Rancid');
+  $('.items-count-container').append(
+   `<p class='item-cleanliness-count sparkling'>You Have ${filterCondition(items, 'Sparkling')} Sparkling Items In Your Garage</p>
+    <p class='item-cleanliness-count dusty'>You Have ${filterCondition(items, 'Dusty')} Dusty Items In Your Garage</p>
+    <p class='item-cleanliness-count rancid'>You Have ${filterCondition(items, 'Rancid')} Rancid Items In Your Garage</p>`
+  );
+}
+
 
 
 $('.add-items-form').on('click', '.submit-button', (event) => submitNewItem(event));

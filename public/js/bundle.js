@@ -67,7 +67,58 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed: SyntaxError: Unexpected token, expected ; (47:43)\n\n\u001b[0m \u001b[90m 45 | \u001b[39m}\n \u001b[90m 46 | \u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 | \u001b[39m\u001b[36mconst\u001b[39m filterCondition \u001b[33m=\u001b[39m (items\u001b[33m,\u001b[39m condition) {\n \u001b[90m    | \u001b[39m                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 | \u001b[39m  \u001b[36mconst\u001b[39m filteredItems \u001b[33m=\u001b[39m items\u001b[33m.\u001b[39mfilter(item \u001b[33m=>\u001b[39m item\u001b[33m.\u001b[39mcleanliness \u001b[33m===\u001b[39m condition)\n \u001b[90m 49 | \u001b[39m  \n \u001b[90m 50 | \u001b[39m}\u001b[0m\n");
+const submitNewItem = event => {
+  event.preventDefault();
+  let itemToPost = {
+    itemName: $('.item-name').val(),
+    lingerReason: $('.item-linger-reason').val(),
+    cleanliness: $('.dropdown-option').val()
+  };
+  postNewItem(itemToPost);
+};
+
+const postNewItem = itemObject => {
+  fetch('/api/v1/garage_items', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(itemObject)
+  }).then(response => response.json()).then(parsed => console.log(parsed)).catch(error => console.log(error));
+};
+
+const appendNewItem = () => {};
+
+const getItems = () => {
+  fetch('/api/v1/garage_items').then(response => response.json()).then(parsed => appendGarageItems(parsed)).catch(error => console.log(error));
+};
+
+const appendGarageItems = items => {
+  items.forEach(item => {
+    $('.items-list').append(`<li class='garage-item item-id-${item.id}'>${item.itemName}</li>`);
+  });
+  numberOfGarageItems(items);
+  numberOfItemCleanliness(items);
+};
+
+const numberOfGarageItems = items => {
+  $('.items-count-container').append(`<p class='item-count'>You Have ${items.length} In Your Garage</p>`);
+};
+
+const filterCondition = (items, condition) => {
+  const filteredItems = items.filter(item => item.cleanliness === condition);
+  return filteredItems.length;
+};
+
+const numberOfItemCleanliness = items => {
+  const numRancid = filterCondition(items, 'Rancid');
+  $('.items-count-container').append(`<p class='item-cleanliness-count sparkling'>You Have ${filterCondition(items, 'Sparkling')} Sparkling Items In Your Garage</p>
+    <p class='item-cleanliness-count dusty'>You Have ${filterCondition(items, 'Dusty')} Dusty Items In Your Garage</p>
+    <p class='item-cleanliness-count rancid'>You Have ${filterCondition(items, 'Rancid')} Rancid Items In Your Garage</p>`);
+};
+
+$('.add-items-form').on('click', '.submit-button', event => submitNewItem(event));
+$(document).ready(() => getItems());
 
 /***/ })
 /******/ ]);
