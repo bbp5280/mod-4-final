@@ -22,11 +22,11 @@ app.get('/api/v1/garage_items/:id', (request, response) => {
 
 });
 
-app.post('/api/v1/garage_items', checkAuth, (request, response) => {
+app.post('/api/v1/garage_items', (request, response) => {
 
 });
 
-app.patch('/api/v1/garage_items/:id', checkAuth, (request, response) => {
+app.patch('/api/v1/garage_items/:id', (request, response) => {
 
 });
 
