@@ -21,7 +21,7 @@ app.get('/api/v1/garage_items', (request, response) => {
 });
 
 app.get('/api/v1/garage_items/:id', (request, response) => {
-  const id = request.params.id;
+  const { id } = request.params;
 
   database('garage_items').where('id', id).select()
     .then(item => {
@@ -51,6 +51,24 @@ app.post('/api/v1/garage_items', (request, response) => {
 });
 
 app.patch('/api/v1/garage_items/:id', (request, response) => {
+  let item = request.body;
+  const { id } = request.params;
+
+  if (!item) {
+   return response.status(422).json({
+     error: `cleanliness must be changed to update`
+   });
+ }
+
+  database('garage_items').where('id', id).update('cleanliness', item.cleanliness)
+  .then(updatedItem => {
+    updatedItem ? response.status(204).json(updatedItem)
+    :
+    response.status(404).json({
+      error: `Could not find an Item with id: ${id}`
+      });
+  })
+  .catch(error => response.status(500).json({error: `internal server error ${error}`}));
 
 });
 
