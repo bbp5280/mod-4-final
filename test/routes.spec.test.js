@@ -97,130 +97,130 @@ describe('API Routes', () => {
   });
 });
 
-describe('GET /api/v1/garage_items/:id', () => {
-  it('should return 404 error for item that does not exist', (done) => {
-    chai.request(server)
-      .get('/api/v1/garage_items/100')
-      .then((response) => {
-        response.should.have.status(404);
-        response.should.be.json;
-        response.body.should.be.a('object');
-        response.body.error.should.equal('Could not find item with id: 100');
-        done();
-      })
-      .catch((error) => {
-        throw error;
-      });
+  describe('GET /api/v1/garage_items/:id', () => {
+    it('should return 404 error for item that does not exist', (done) => {
+      chai.request(server)
+        .get('/api/v1/garage_items/100')
+        .then((response) => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.error.should.equal('Could not find item with id: 100');
+          done();
+        })
+        .catch((error) => {
+          throw error;
+        });
+    });
   });
-});
 
-describe('POST /api/v1/garage_items', () => {
-  it("should add new item to garage_items", (done) => {
-    chai.request(server)
-      .post('/api/v1/garage_items')
-      .send({
-        id: 10,
-        itemName: 'Bike',
-        lingerReason: 'No one will steal it',
-        cleanliness: 'Dusty',
-      })
-      .then(response => {
-        response.should.have.status(201);
-        response.should.be.json;
-        response.body.should.be.a('array');
-        response.body.length.should.equal(1);
-        response.body[0].should.have.property('id');
-        response.body[0].id.should.equal(10);
-        response.body[0].itemName.should.equal('Bike');
-        response.body[0].lingerReason.should.equal('No one will steal it');
-        response.body[0].cleanliness.should.equal('Dusty');
-        response.body[0].should.have.property('created_at');
-        response.body[0].should.have.property('updated_at');
-        done();
-      })
-      .catch(error => {
-        throw error;
-      });
+  describe('POST /api/v1/garage_items', () => {
+    it("should add new item to garage_items", (done) => {
+      chai.request(server)
+        .post('/api/v1/garage_items')
+        .send({
+          id: 10,
+          itemName: 'Bike',
+          lingerReason: 'No one will steal it',
+          cleanliness: 'Dusty',
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].id.should.equal(10);
+          response.body[0].itemName.should.equal('Bike');
+          response.body[0].lingerReason.should.equal('No one will steal it');
+          response.body[0].cleanliness.should.equal('Dusty');
+          response.body[0].should.have.property('created_at');
+          response.body[0].should.have.property('updated_at');
+          done();
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
   });
-});
 
-describe('POST /api/v1/garage_items', () => {
-  it("should serve an error if a property is missing", (done) => {
-    chai.request(server)
-      .post('/api/v1/garage_items')
-      .send({
-        id: 10,
-        itemName: 'Bike',
-        lingerReason: 'No one will steal it'
-      })
-      .then(response => {
-        response.should.have.status(422);
-        response.should.be.json;
-        response.body.should.be.a('object');
-        response.body.error.should.equal('you are missing the cleanliness property');
-        done();
-      })
-      .catch(error => {
-        throw error;
-      });
+  describe('POST /api/v1/garage_items', () => {
+    it("should serve an error if a property is missing", (done) => {
+      chai.request(server)
+        .post('/api/v1/garage_items')
+        .send({
+          id: 10,
+          itemName: 'Bike',
+          lingerReason: 'No one will steal it'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.error.should.equal('you are missing the cleanliness property');
+          done();
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
   });
-});
 
-describe('PATCH /api/v1/garage_items/:id', () => {
-  it.skip("should update item in garage_items", (done) => {
-    chai.request(server)
-      .patch('/api/v1/garage_items/100')
-      .send({
-        cleanliness: 'Rancid'
-      })
-      .then(response => {
-        // console.log(response);
-        response.should.have.status(204);
-        done();
-      })
-      .catch(error => {
-        throw error;
-      });
+  describe('PATCH /api/v1/garage_items/:id', () => {
+    it.skip("should update item in garage_items", (done) => {
+      chai.request(server)
+        .patch('/api/v1/garage_items/100')
+        .send({
+          cleanliness: 'Rancid'
+        })
+        .then(response => {
+          // console.log(response);
+          response.should.have.status(204);
+          done();
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
   });
-});
 
-describe('PATCH /api/v1/garage_items/:id', () => {
-  it('should return 404 error for item that does not exist', (done) => {
-    chai.request(server)
-      .patch('/api/v1/garage_items/100')
-      .send({
-        cleanliness: 'Rancid'
-      })
-      .then(response => {
-        response.should.have.status(404);
-        response.should.be.json;
-        response.body.should.be.a('object');
-        response.body.error.should.equal('Could not find an item with id: 100');
-        done();
-      })
-      .catch((error) => {
-        throw error;
-      });
+  describe('PATCH /api/v1/garage_items/:id', () => {
+    it('should return 404 error for item that does not exist', (done) => {
+      chai.request(server)
+        .patch('/api/v1/garage_items/100')
+        .send({
+          cleanliness: 'Rancid'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.error.should.equal('Could not find an item with id: 100');
+          done();
+        })
+        .catch((error) => {
+          throw error;
+        });
+    });
   });
-});
 
-describe('PATCH /api/v1/garage_items/:id', () => {
-  it('should return 404 error for item that does not exist', (done) => {
-    chai.request(server)
-      .patch('/api/v1/garage_items/1')
-      .send({
-      })
-      .then(response => {
-        response.should.have.status(422);
-        response.should.be.json;
-        response.body.should.be.a('object');
-        response.body.error.should.equal('cleanliness must be changed to update');
-        done();
-      })
-      .catch((error) => {
-        throw error;
-      });
+  describe('PATCH /api/v1/garage_items/:id', () => {
+    it('should return 404 error for item that does not exist', (done) => {
+      chai.request(server)
+        .patch('/api/v1/garage_items/1')
+        .send({
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.error.should.equal('cleanliness must be changed to update');
+          done();
+        })
+        .catch((error) => {
+          throw error;
+        });
+    });
   });
-});
 
 });
