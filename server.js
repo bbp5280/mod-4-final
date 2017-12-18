@@ -15,7 +15,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/api/v1/garage_items', (request, response) => {
-
+  database('garage_items').select()
+  .then(garageItems => response.status(200).json(garageItems))
+  .catch(error => response.status(500).json({error: `internal server error ${error}`}))
 });
 
 app.get('/api/v1/garage_items/:id', (request, response) => {
