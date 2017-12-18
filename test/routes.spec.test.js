@@ -50,4 +50,26 @@ describe('API Routes', () => {
       });
   });
 
+  describe('GET /api/v1/garage_items', () => {
+    it("should return all garage items", (done) => {
+      chai.request(server)
+        .get('/api/v1/garage_items')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(3);
+          response.body[0].should.have.property('id');
+          response.body[0].id.should.equal(1);
+          response.body[0].should.have.property('itemName');
+          response.body[0].should.have.property('lingerReason');
+          response.body[0].should.have.property('cleanliness');
+          done();
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
 });
