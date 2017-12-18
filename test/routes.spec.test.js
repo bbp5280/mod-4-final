@@ -114,4 +114,56 @@ describe('GET /api/v1/garage_items/:id', () => {
   });
 });
 
+describe('POST /api/v1/garage_items', () => {
+  it("should add new item to garage_items", (done) => {
+    chai.request(server)
+      .post('/api/v1/garage_items')
+      .send({
+        id: 10,
+        itemName: 'Bike',
+        lingerReason: 'No one will steal it',
+        cleanliness: 'Dusty',
+      })
+      .then(response => {
+        response.should.have.status(201);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body[0].should.have.property('id');
+        response.body[0].id.should.equal(10);
+        response.body[0].itemName.should.equal('Bike');
+        response.body[0].lingerReason.should.equal('No one will steal it');
+        response.body[0].cleanliness.should.equal('Dusty');
+        response.body[0].should.have.property('created_at');
+        response.body[0].should.have.property('updated_at');
+        done();
+      })
+      .catch(error => {
+        throw error;
+      });
+  });
+});
+
+describe('POST /api/v1/garage_items', () => {
+  it("should serve an error if a property is missing", (done) => {
+    chai.request(server)
+      .post('/api/v1/garage_items')
+      .send({
+        id: 10,
+        itemName: 'Bike',
+        lingerReason: 'No one will steal it'
+      })
+      .then(response => {
+        response.should.have.status(422);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.equal('you are missing the cleanliness property');
+        done();
+      })
+      .catch(error => {
+        throw error;
+      });
+  });
+});
+
 });
