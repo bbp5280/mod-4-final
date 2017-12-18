@@ -166,4 +166,61 @@ describe('POST /api/v1/garage_items', () => {
   });
 });
 
+describe('PATCH /api/v1/garage_items/:id', () => {
+  it.skip("should update item in garage_items", (done) => {
+    chai.request(server)
+      .patch('/api/v1/garage_items/100')
+      .send({
+        cleanliness: 'Rancid'
+      })
+      .then(response => {
+        // console.log(response);
+        response.should.have.status(204);
+        done();
+      })
+      .catch(error => {
+        throw error;
+      });
+  });
+});
+
+describe('PATCH /api/v1/garage_items/:id', () => {
+  it('should return 404 error for item that does not exist', (done) => {
+    chai.request(server)
+      .patch('/api/v1/garage_items/100')
+      .send({
+        cleanliness: 'Rancid'
+      })
+      .then(response => {
+        response.should.have.status(404);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.equal('Could not find an item with id: 100');
+        done();
+      })
+      .catch((error) => {
+        throw error;
+      });
+  });
+});
+
+describe('PATCH /api/v1/garage_items/:id', () => {
+  it('should return 404 error for item that does not exist', (done) => {
+    chai.request(server)
+      .patch('/api/v1/garage_items/1')
+      .send({
+      })
+      .then(response => {
+        response.should.have.status(422);
+        response.should.be.json;
+        response.body.should.be.a('object');
+        response.body.error.should.equal('cleanliness must be changed to update');
+        done();
+      })
+      .catch((error) => {
+        throw error;
+      });
+  });
+});
+
 });

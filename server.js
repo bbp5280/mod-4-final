@@ -51,7 +51,7 @@ app.post('/api/v1/garage_items', (request, response) => {
 });
 
 app.patch('/api/v1/garage_items/:id', (request, response) => {
-  let item = request.body;
+  let item = request.body.cleanliness;
   const { id } = request.params;
 
   if (!item) {
@@ -60,12 +60,13 @@ app.patch('/api/v1/garage_items/:id', (request, response) => {
    });
  }
 
-  database('garage_items').where('id', id).update('cleanliness', item.cleanliness)
+  database('garage_items').where('id', id).update('cleanliness', item)
   .then(updatedItem => {
-    updatedItem ? response.status(204).json(updatedItem)
+    console.log(updatedItem);
+    updatedItem ? response.status(204)
     :
     response.status(404).json({
-      error: `Could not find an Item with id: ${id}`
+      error: `Could not find an item with id: ${id}`
       });
   })
   .catch(error => response.status(500).json({error: `internal server error ${error}`}));
