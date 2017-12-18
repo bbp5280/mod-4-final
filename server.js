@@ -15,11 +15,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/api/v1/garage_items', (request, response) => {
-
+  database('garage_items').select()
+  .then(garageItems => response.status(200).json(garageItems))
+  .catch(error => response.status(500).json({error: `internal server error ${error}`}))
 });
 
 app.get('/api/v1/garage_items/:id', (request, response) => {
+  const id = request.params.id;
 
+  database('garage_items').where('id', id).select()
+    .then(item => {
+      item.length ? response.status(200).json(item)
+      :
+      respnse.status(404).json({
+        error: `Could not find owner with id: ${id}`
+        });
+    })
+    .catch(error => response.status(500).json({error: `internal server error ${error}`}));
 });
 
 app.post('/api/v1/garage_items', (request, response) => {
