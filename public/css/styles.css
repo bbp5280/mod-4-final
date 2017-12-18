@@ -1,0 +1,12 @@
+.garage-item-details{
+  display: flex;
+  flex-direction: column;
+}
+
+.inactive-details{
+  display: none;
+}
+
+.active-details{
+  display: flex;
+}
