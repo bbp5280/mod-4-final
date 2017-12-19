@@ -1,6 +1,6 @@
 const submitNewItem = (event) => {
   event.preventDefault();
-  let itemToPost = {
+  const itemToPost = {
     itemName: $('.item-name').val(),
     lingerReason: $('.item-linger-reason').val(),
     cleanliness: $('.condition-select').val()
@@ -37,10 +37,15 @@ getItems()
 const appendGarageItems = (items) => {
   items.forEach(item => {
     $('.items-list').append(
-      `<h3 class='garage-item-name item-id-${item.id}' id='item${item.id}'>${item.itemName}</h3>
+      `<h3 class='garage-item-name item-id-${item.id}' id='item${item.id}' data='${item.id}'>${item.itemName}</h3>
        <div class='garage-item-details item-id-${item.id} inactive-details'>
        <p class='item-details item-id-${item.id}'>Reason For Holding: ${item.lingerReason}</p>
        <p class='item-details item-id-${item.id}'>Cleanliness Level: ${item.cleanliness}</p>
+       <select class="condition-update" value="Select Condition" id='item${item.id}'>
+         <option class="dropdown-option" value='Sparkling'>Sparkling</option>
+         <option class="dropdown-option" value='Dusty'>Dusty</option>
+         <option class="dropdown-option" value='Rancid'>Rancid</option>
+       </select>
      </div>`);
   })
   numberOfGarageItems(items);
@@ -74,6 +79,34 @@ const numberOfItemCleanliness = (items) => {
   );
 }
 
+const slideDoor = () => {
+  $('.sliding-door').slideToggle(4000)
+}
 
+const updateCleanliness = () => {
+  const updateBody = {
+    cleanliness: $('.condition-update').val()
+  }
+  const id = $(event.target).closest('.condition-update').attr('id').slice(4)
+
+  console.log(updateBody);
+
+  patchCleanliness(id, updateBody)
+}
+
+const patchCleanliness = (id, body) => {
+  fetch(`/api/v1/garage_items/${id}`, {
+    method: 'PATCH',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  })
+    .then(response => getItems())
+    .catch(error => console.log(error));
+}
+
+$(document).ready(() => slideDoor());
 $('.add-items-form').on('click', '.submit-button', (event) => submitNewItem(event));
 $('.items-container').on('click', '.garage-item-name', (event) => showDetails(event));
+$('.items-container').on('change', 'select', (event) => updateCleanliness(event))
