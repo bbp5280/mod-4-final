@@ -73,7 +73,6 @@ app.patch('/api/v1/garage_items/:id', (request, response) => {
 
 });
 
-
 app.listen(app.get('port'), () => {
   console.log(`App is running on ${app.get('port')}.`);
 });
