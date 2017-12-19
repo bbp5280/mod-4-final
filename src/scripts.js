@@ -40,8 +40,9 @@ const appendGarageItems = (items) => {
       `<h3 class='garage-item-name item-id-${item.id}' id='item${item.id}' data='${item.id}'>${item.itemName}</h3>
        <div class='garage-item-details item-id-${item.id} inactive-details'>
        <p class='item-details item-id-${item.id}'>Reason For Holding: ${item.lingerReason}</p>
-       <p class='item-details item-id-${item.id}'>Cleanliness Level: ${item.cleanliness}</p>
+       <p class='item-details item-id-${item.id} cleanliness-id-${item.id}'>Cleanliness Level: ${item.cleanliness}</p>
        <select class="condition-update" value="Select Condition" id='item${item.id}'>
+         <option class="dropdown-option">Select One To Update</option>
          <option class="dropdown-option" value='Sparkling'>Sparkling</option>
          <option class="dropdown-option" value='Dusty'>Dusty</option>
          <option class="dropdown-option" value='Rancid'>Rancid</option>
@@ -85,13 +86,12 @@ const slideDoor = () => {
 
 const updateCleanliness = () => {
   const updateBody = {
-    cleanliness: $('.condition-update').val()
+    cleanliness: $(event.target).val()
   }
   const id = $(event.target).closest('.condition-update').attr('id').slice(4)
 
-  console.log(updateBody);
-
   patchCleanliness(id, updateBody)
+  $(`.cleanliness-id-${id}`).text(`Cleanliness Level: ${$(event.target).val()}`)
 }
 
 const patchCleanliness = (id, body) => {
@@ -102,7 +102,7 @@ const patchCleanliness = (id, body) => {
     },
     body: JSON.stringify(body)
   })
-    .then(response => getItems())
+    .then(response => response.json())
     .catch(error => console.log(error));
 }
 
