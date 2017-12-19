@@ -97,8 +97,8 @@ const getItems = () => {
 
 getItems();
 
-const appendGarageItems = items => {
-  const sorted = items.sort((a, b) => {
+const sortItems = items => {
+  return sorted = items.sort((a, b) => {
     const nameA = a.itemName.toUpperCase();
     const nameB = b.itemName.toUpperCase();
     if (nameA < nameB) {
@@ -109,8 +109,11 @@ const appendGarageItems = items => {
     }
     return 0;
   });
+};
 
-  // const sorted = sortItems(items)
+const appendGarageItems = items => {
+
+  const sorted = sortItems(items);
   sorted.forEach(item => {
     $('.items-list').append(`<h3 class='garage-item-name item-id-${item.id}' id='item${item.id}' data='${item.id}'>${item.itemName}</h3>
        <div class='garage-item-details item-id-${item.id} inactive-details'>
