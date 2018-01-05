@@ -150,7 +150,7 @@ const appendGarageItems = items => {
     $('.items-list').append(`<div class='item-container'>
       <div>
       <h3 class='garage-item-name item-id-${item.id}' id='item${item.id}' data='${item.id}'>${item.itemName}</h3>
-      <p class='garage-item-name show-details-${item.id} deails' id='item${item.id}' data='${item.id}'>Details</p>
+      <p class='garage-item-name show-details-${item.id} details' id='item${item.id}' data='${item.id}'>Details</p>
       </div>
        <div class='garage-item-details item-id-${item.id} inactive-details'>
        <p class='item-details item-id-${item.id}'>Reason For Holding: ${item.lingerReason}</p>
