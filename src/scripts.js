@@ -48,13 +48,56 @@ const sortItems = (items) => {
     });
 }
 
+const sortAToZ = () => {
+  $('.items-list').html('')
+  $('.items-count-container').html('')
+  fetch('/api/v1/garage_items')
+    .then(response => response.json())
+    .then(parsed => {
+      const sorted = sortItems(parsed)
+      appendGarageItems(sorted)
+      })
+    .catch(error => console.log(error))
+}
+
+const sortDescending = (items) => {
+  return sorted = items.sort((a, b) => {
+    const nameA = a.itemName.toUpperCase();
+    const nameB = b.itemName.toUpperCase();
+    if (nameA > nameB) {
+      return -1;
+    }
+    if (nameA < nameB) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+
+const sortZToA = () => {
+  $('.items-list').html('')
+  $('.items-count-container').html('')
+  fetch('/api/v1/garage_items')
+    .then(response => response.json())
+    .then(parsed => {
+      const sorted = sortDescending(parsed)
+      appendGarageItems(sorted)
+      })
+    .catch(error => console.log(error))
+}
+
 
 const appendGarageItems = (items) => {
 
-  const sorted = sortItems(items)
-  sorted.forEach(item => {
+  // const sorted = sortItems(items)
+  items.forEach(item => {
     $('.items-list').append(
-      `<h3 class='garage-item-name item-id-${item.id}' id='item${item.id}' data='${item.id}'>${item.itemName}</h3>
+      `<div class='item-container'>
+      <div>
+      <h3 class='garage-item-name item-id-${item.id}' id='item${item.id}' data='${item.id}'>${item.itemName}</h3>
+      <p class='garage-item-name show-details-${item.id} deails' id='item${item.id}' data='${item.id}'>Details</p>
+      </div>
        <div class='garage-item-details item-id-${item.id} inactive-details'>
        <p class='item-details item-id-${item.id}'>Reason For Holding: ${item.lingerReason}</p>
        <p class='item-details item-id-${item.id} cleanliness-id-${item.id}'>Cleanliness Level: ${item.cleanliness}</p>
@@ -64,6 +107,7 @@ const appendGarageItems = (items) => {
          <option class="dropdown-option" value='Dusty'>Dusty</option>
          <option class="dropdown-option" value='Rancid'>Rancid</option>
        </select>
+     </div>
      </div>`);
   })
   numberOfGarageItems(items);
@@ -73,13 +117,13 @@ const appendGarageItems = (items) => {
 const showDetails = (event) => {
   const itemNumber = event.target.id.slice(4)
   const divToShow = $(`.item-id-${itemNumber}`)
-
+  
   divToShow.toggleClass('active-details')
 }
 
 const numberOfGarageItems = (items) => {
   $('.items-count-container').append(
-    `<p class='item-count'>You Have ${items.length} In Your Garage</p>`
+    `<p class='item-count'>Total Items: ${items.length} </p>`
   );
 }
 
@@ -89,16 +133,21 @@ const filterCondition = (items, condition) => {
 }
 
 const numberOfItemCleanliness = (items) => {
-  const numRancid = filterCondition(items, 'Rancid');
   $('.items-count-container').append(
-   `<p class='item-cleanliness-count sparkling'>You Have ${filterCondition(items, 'Sparkling')} Sparkling Items In Your Garage</p>
-    <p class='item-cleanliness-count dusty'>You Have ${filterCondition(items, 'Dusty')} Dusty Items In Your Garage</p>
-    <p class='item-cleanliness-count rancid'>You Have ${filterCondition(items, 'Rancid')} Rancid Items In Your Garage</p>`
+   `<p class='item-cleanliness-count sparkling'>Sparkling Items: ${filterCondition(items, 'Sparkling')} </p>
+    <p class='item-cleanliness-count dusty'>Dusty Items: ${filterCondition(items, 'Dusty')} </p>
+    <p class='item-cleanliness-count rancid'>Rancid Items: ${filterCondition(items, 'Rancid')} </p>`
   );
 }
 
+
 const slideDoor = () => {
-  $('.sliding-door').slideToggle(4000)
+  $('.sliding-door').slideToggle(4000, () => {
+    const text = $('.open-close-door').text();
+    text === 'Close Garage Door' ?
+      $('.open-close-door').text('Open Garage Door') :
+      $('.open-close-door').text('Close Garage Door')
+  });
 }
 
 const updateCleanliness = () => {
@@ -107,8 +156,9 @@ const updateCleanliness = () => {
   }
   const id = $(event.target).closest('.condition-update').attr('id').slice(4)
 
-  patchCleanliness(id, updateBody)
+   patchCleanliness(id, updateBody)
   $(`.cleanliness-id-${id}`).text(`Cleanliness Level: ${$(event.target).val()}`)
+
 }
 
 const patchCleanliness = (id, body) => {
@@ -123,7 +173,9 @@ const patchCleanliness = (id, body) => {
     .catch(error => console.log(error));
 }
 
-$(document).ready(() => slideDoor());
+$('.open-close-door').on('click', slideDoor)
 $('.add-items-form').on('click', '.submit-button', (event) => submitNewItem(event));
+$('.add-items-form').on('click', '.sort-a-z', (event) => sortAToZ(event));
+$('.add-items-form').on('click', '.sort-z-a', (event) => sortZToA(event));
 $('.items-container').on('click', '.garage-item-name', (event) => showDetails(event));
 $('.items-container').on('change', 'select', (event) => updateCleanliness(event))

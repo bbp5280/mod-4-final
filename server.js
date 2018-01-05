@@ -62,8 +62,7 @@ app.patch('/api/v1/garage_items/:id', (request, response) => {
 
   database('garage_items').where('id', id).update('cleanliness', item)
   .then(updatedItem => {
-    console.log(updatedItem);
-    updatedItem ? response.status(204)
+    updatedItem ? response.status(201).json
     :
     response.status(404).json({
       error: `Could not find an item with id: ${id}`

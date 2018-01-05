@@ -1,3 +1,58 @@
+body{
+  font-family: 'Open Sans', sans-serif;
+  background-color: #d1d0d1;
+}
+
+main{
+  height: 90vh;
+  overflow: scroll;
+}
+
+.image-container{
+  text-align: center;
+  width: 66%;
+  margin: auto;
+}
+
+.logo{
+  margin: auto;
+}
+
+.open-close-door{
+  color: #a55656;
+  cursor: pointer;
+  margin: .5em .25em .75em .25em;
+  background-color: #d1d0d1;
+  border: none;
+  font-size: 1.5em;
+}
+
+.open-close-door:hover{
+  color: #fff
+}
+
+.sliding-door{
+  height: 90vh;
+  width: 100%;
+  background-image: url("../assets/GarageDoor.jpg");
+  background-repeat: no-repeat;
+  background-size: 100vw 90vh;
+  overflow: hidden;
+  position: absolute;
+  z-index: 100;
+  margin: 0 0 0 -8px;
+}
+
+.items-list{
+  text-align: center;
+}
+
+.item-container{
+  width:66%;
+  margin: auto;
+  border-bottom: solid black 1px;
+}
+
 .garage-item-details{
   display: flex;
   flex-direction: column;
@@ -8,14 +63,62 @@
 }
 
 .active-details{
+  display: block;
+}
+
+.garage-item-name {
+  cursor: pointer;
+}
+
+.details:hover{
+  color: #fff;
+}
+
+.add-search-form,  .add-items-form, .select-submit{
+    text-align: center;
+    width: 66% !important;
+    margin: auto;
+    padding: 0px;
+    margin-bottom: .5em;
+
+}
+
+input{
+  border:none;
+  margin-bottom: .5em;
+  padding: .5em;
+}
+
+.condition-select{
+  margin: .5em 1em .5em .5em;
+}
+
+.submit-button{
+  cursor: pointer;
+}
+
+.submit-button:hover{
+  background-color: #a55656;
+}
+
+.sort{
+  cursor: pointer;
+  margin: 1em .5em .5em .5em;
+}
+
+.sort:hover{
+  background-color: #a55656;
+}
+
+.items-count-container{
+  justify-content: center;
   display: flex;
 }
 
-.sliding-door{
-  height: 80vh;
-  width: 100%;
-  background-color: red;
-  overflow: hidden;
-  position: absolute;
-  z-index: 100;
+.item-cleanliness-count{
+  margin: .75em;
+}
+
+.item-count{
+  margin: .75em;
 }
