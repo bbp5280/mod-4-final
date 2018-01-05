@@ -8,6 +8,10 @@ main{
   overflow: scroll;
 }
 
+input{
+  background-color: #ededed;
+}
+
 .image-container{
   text-align: center;
   width: 66%;
@@ -91,6 +95,7 @@ input{
 
 .condition-select{
   margin: .5em 1em .5em .5em;
+  background-color: #ededed;
 }
 
 .submit-button{
